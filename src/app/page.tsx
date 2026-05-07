@@ -143,7 +143,7 @@ export default function DashboardPage() {
                     <p className="text-sm font-bold" style={{ fontFamily: "var(--font-rajdhani)" }}>
                       {reportTypeLabel[report.type] || 'Lainnya'}
                     </p>
-                    <p className="mt-0.5 text-xs text-[#94A3B8]">{report.note}</p>
+                    <p className="mt-0.5 text-xs text-[#94A3B8]">{report.description}</p>
                   </div>
                 </div>
                 <span className="data-mono shrink-0 text-[10px] text-[#64748B]">
