@@ -36,18 +36,18 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="relative z-10 space-y-4">
       {/* Status bar */}
-      <div className="flex flex-wrap items-center gap-4 rounded-lg bg-[#0F2414] px-4 py-2.5 text-xs border border-[#22C55E]/5">
+      <div className="flex flex-wrap items-center gap-3 rounded-lg bg-[#0A1A0E] px-4 py-2.5 text-xs border border-[#22C55E]/10">
         <span className="status-indicator">
           <span className="status-dot green" />
           SYSTEM ACTIVE
         </span>
         <span className="text-[#64748B]">|</span>
         <span className="data-mono text-[#94A3B8]">
-          {activePatrols.length} PATROLS · {freshCheckpoints.length}/{checkpoints.length} CHECKPOINTS FRESH
+          {activePatrols.length} PATROLS · {freshCheckpoints.length}/{checkpoints.length} CKP FRESH
         </span>
-        <span className="ml-auto data-mono text-[#64748B] uppercase">
+        <span className="ml-auto data-mono text-[#64748B]">
           {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} WIB
         </span>
       </div>
@@ -55,11 +55,13 @@ export default function DashboardPage() {
       {/* Emergency button */}
       <section>
         {panicSeconds > 0 ? (
-          <div className="tactical-panel border-[#DC2626]/50 bg-[#1A0A0A] p-6 text-center">
-            <Siren size={32} className="mx-auto mb-3 text-[#DC2626]" />
-            <p className="data-mono text-xl font-bold text-[#DC2626] uppercase tracking-[0.2em]">PANIC ACTIVE</p>
-            <p className="mt-2 data-mono text-3xl text-[#F59E0B]">{panicSeconds}s</p>
-            <p className="mt-1 text-xs text-[#94A3B8]">{panicNote}</p>
+          <div className="rounded-xl border-2 border-[#DC2626]/50 bg-[#1A0A0A] p-8 text-center">
+            <Siren size={40} className="mx-auto mb-4 text-[#DC2626] animate-pulse" />
+            <p className="data-mono text-2xl font-bold text-[#DC2626] uppercase tracking-[0.2em]">PANIC ACTIVE</p>
+            <p className="mt-3 text-5xl font-black text-[#F59E0B]" style={{ fontFamily: "var(--font-share-tech)" }}>
+              {panicSeconds}s
+            </p>
+            <p className="mt-2 text-sm text-[#94A3B8]">{panicNote}</p>
           </div>
         ) : (
           <button
@@ -69,7 +71,7 @@ export default function DashboardPage() {
             }}
             className="emergency-btn"
           >
-            <Siren size={22} />
+            <Siren size={24} />
             AKTIFKAN DARURAT
           </button>
         )}
@@ -85,12 +87,12 @@ export default function DashboardPage() {
         ].map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="tactical-panel p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon size={14} style={{ color: stat.color }} />
-                <span className="text-[10px] text-[#64748B] uppercase tracking-[0.12em]">{stat.label}</span>
+            <div key={stat.label} className="tactical-panel p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Icon size={15} style={{ color: stat.color }} />
+                <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#64748B]">{stat.label}</span>
               </div>
-              <span className="data-mono text-2xl font-bold text-[#E2E8F0]">{stat.value}</span>
+              <span className="data-mono text-3xl font-bold text-[#E2E8F0]">{stat.value}</span>
             </div>
           );
         })}
@@ -98,22 +100,24 @@ export default function DashboardPage() {
 
       {/* Active patrols */}
       <section>
-        <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#22C55E]" style={{ fontFamily: "var(--font-rajdhani)" }}>
-          <Radio size={14} className="inline mr-2" />
+        <h2 className="section-title mb-4 flex items-center gap-2 text-sm uppercase tracking-[0.15em] text-[#22C55E]">
+          <Radio size={14} />
           Active Patrol Routes
         </h2>
         <div className="grid gap-3 sm:grid-cols-3">
           {['Rute Utara', 'Rute Tengah', 'Rute Selatan'].map((route, i) => {
             const isActive = i < activePatrols.length;
             return (
-              <div key={route} className={`checkpoint-card ${isActive ? 'border-l-2 border-l-[#22C55E]' : 'border-l-2 border-l-[#64748B]/30'}`}>
+              <div
+                key={route}
+                className="checkpoint-card"
+                style={{ borderLeft: `3px solid ${isActive ? '#22C55E' : '#64748B30'}` }}
+              >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold" style={{ fontFamily: "var(--font-rajdhani)" }}>
-                    {route}
-                  </span>
+                  <span className="section-title text-base font-bold">{route}</span>
                   <span className={`status-dot ${isActive ? 'green' : ''}`} style={!isActive ? { background: '#64748B', boxShadow: 'none' } : {}} />
                 </div>
-                <p className="mt-1 data-mono text-[10px] text-[#64748B]">
+                <p className="mt-2 data-mono text-[11px] text-[#64748B]">
                   {isActive ? 'ON PATROL' : 'STANDBY'}
                 </p>
               </div>
@@ -124,29 +128,29 @@ export default function DashboardPage() {
 
       {/* Recent reports */}
       <section>
-        <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#F59E0B]" style={{ fontFamily: "var(--font-rajdhani)" }}>
-          <BellRing size={14} className="inline mr-2" />
+        <h2 className="section-title mb-4 flex items-center gap-2 text-sm uppercase tracking-[0.15em] text-[#F59E0B]">
+          <BellRing size={14} />
           Recent Reports
         </h2>
         <div className="space-y-2">
           {recentReports.length === 0 ? (
-            <div className="tactical-panel p-6 text-center">
-              <ShieldAlert size={24} className="mx-auto mb-2 text-[#22C55E]" />
-              <p className="data-mono text-xs text-[#64748B]">NO REPORTS — AREA SECURE</p>
+            <div className="tactical-panel p-8 text-center">
+              <ShieldAlert size={28} className="mx-auto mb-3 text-[#22C55E]" />
+              <p className="data-mono text-sm text-[#64748B]">NO REPORTS — AREA SECURE</p>
             </div>
           ) : (
             recentReports.map((report) => (
-              <div key={report.id} className="tactical-panel flex items-center justify-between p-4">
-                <div className="flex items-start gap-3">
+              <div key={report.id} className="tactical-panel flex items-center justify-between p-5">
+                <div className="flex items-start gap-4">
                   <span className={`status-dot mt-1.5 ${report.status === 'baru' ? 'red' : report.status === 'diproses' ? 'amber' : 'green'}`} />
                   <div>
-                    <p className="text-sm font-bold" style={{ fontFamily: "var(--font-rajdhani)" }}>
+                    <p className="section-title text-sm font-bold">
                       {reportTypeLabel[report.type] || 'Lainnya'}
                     </p>
                     <p className="mt-0.5 text-xs text-[#94A3B8]">{report.description}</p>
                   </div>
                 </div>
-                <span className="data-mono shrink-0 text-[10px] text-[#64748B]">
+                <span className="data-mono shrink-0 text-[11px] text-[#64748B]">
                   {formatRelativeTime(report.timestamp)}
                 </span>
               </div>

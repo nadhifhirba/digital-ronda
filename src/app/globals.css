@@ -2,102 +2,160 @@
 
 :root {
   color-scheme: dark;
-  --bg: #0A1C0E;
-  --surface: #0F2414;
-  --surface-raised: #152D1C;
+  --bg: #060E08;
+  --surface: #0A1A0E;
+  --surface-raised: #0F2414;
+  --border: rgba(34, 197, 94, 0.08);
+  --border-active: rgba(245, 158, 11, 0.25);
+  --terminal-green: #22C55E;
   --alert-amber: #F59E0B;
   --danger-red: #DC2626;
-  --terminal-green: #22C55E;
+  --info-blue: #3B82F6;
   --text-primary: #E2E8F0;
   --text-secondary: #94A3B8;
-  --text-tertiary: #64748B;
-  --border: rgba(148, 163, 184, 0.08);
-  --border-active: rgba(245, 158, 11, 0.3);
+  --text-muted: #64748B;
 }
 
 html { background: var(--bg); }
 body {
   margin: 0; min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(34, 197, 94, 0.04), transparent 60%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-rajdhani), "Rajdhani", system-ui, sans-serif;
+  font-family: var(--font-rajdhani), "Rajdhani", system-ui;
   -webkit-font-smoothing: antialiased;
 }
-
-* { box-sizing: border-box; border-color: var(--border); }
 ::selection { background: rgba(34, 197, 94, 0.2); color: var(--terminal-green); }
 
-/* Radar grid pattern */
+/* ── Radar Grid ── */
 .radar-bg {
   position: relative;
 }
 .radar-bg::before {
-  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background-image:
-    radial-gradient(circle at 50% 50%, transparent 30%, rgba(34, 197, 94, 0.02) 31%, transparent 32%),
-    radial-gradient(circle at 50% 50%, transparent 50%, rgba(34, 197, 94, 0.015) 51%, transparent 52%),
-    radial-gradient(circle at 50% 50%, transparent 70%, rgba(34, 197, 94, 0.01) 71%, transparent 72%);
-  background-size: 200px 200px;
+    radial-gradient(circle at 50% 50%, transparent 30%, rgba(34,197,94,0.015) 31%, transparent 32%),
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(34,197,94,0.01) 51%, transparent 52%),
+    radial-gradient(circle at 50% 50%, transparent 70%, rgba(34,197,94,0.008) 71%, transparent 72%);
+  background-size: 600px 600px, 900px 900px, 1200px 1200px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* Tactical panel */
+/* ── Scanline overlay ── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  opacity: 0.3;
+}
+
+/* ── Data Mono ── */
+.data-mono {
+  font-family: var(--font-share-tech), "Share Tech Mono", monospace;
+  letter-spacing: 0.03em;
+}
+
+/* ── Tactical Panel ── */
 .tactical-panel {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
+}
+.tactical-panel:hover {
+  border-color: rgba(34, 197, 94, 0.15);
+}
+
+/* ── Status Dot ── */
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+.status-dot.green { background: var(--terminal-green); box-shadow: 0 0 8px rgba(34,197,94,0.4); }
+.status-dot.amber { background: var(--alert-amber); box-shadow: 0 0 8px rgba(245,158,11,0.4); }
+.status-dot.red { background: var(--danger-red); box-shadow: 0 0 8px rgba(220,38,38,0.4); animation: pulse-red 1.5s ease-in-out infinite; }
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; box-shadow: 0 0 12px rgba(220,38,38,0.6); }
+  50% { opacity: 0.5; box-shadow: 0 0 4px rgba(220,38,38,0.2); }
+}
+
+/* ── Emergency Button ── */
+.emergency-btn {
+  width: 100%;
+  padding: 20px;
+  font-family: var(--font-share-tech), monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--danger-red);
+  background: rgba(220, 38, 38, 0.06);
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s;
+  position: relative;
   overflow: hidden;
 }
-
-/* Emergency button */
-.emergency-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 20px;
-  background: linear-gradient(135deg, #DC2626, #991B1B);
-  border: 2px solid #EF4444;
-  border-radius: 8px;
-  color: #FFF;
-  font-family: var(--font-share-tech), "Share Tech Mono", monospace;
-  font-size: 18px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.2em;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 0 40px rgba(220, 38, 38, 0.3);
-  animation: panic-pulse 2s ease-in-out infinite;
-}
 .emergency-btn:hover {
-  background: linear-gradient(135deg, #EF4444, #B91C1C);
-  box-shadow: 0 0 60px rgba(220, 38, 38, 0.5);
+  background: rgba(220, 38, 38, 0.12);
+  border-color: var(--danger-red);
+  box-shadow: 0 0 40px rgba(220,38,38,0.15);
 }
-@keyframes panic-pulse {
-  0%, 100% { box-shadow: 0 0 40px rgba(220, 38, 38, 0.3); }
-  50% { box-shadow: 0 0 80px rgba(220, 38, 38, 0.5); }
+.emergency-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(220,38,38,0.05), transparent);
+  animation: scan 2s linear infinite;
+}
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-/* Data display */
-.data-mono {
-  font-family: var(--font-share-tech), "Share Tech Mono", monospace;
-  font-feature-settings: "tnum";
-}
-
-/* Status indicator */
-.status-indicator {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-share-tech), "Share Tech Mono", monospace;
-  font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
-}
-.status-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-}
-.status-dot.green { background: var(--terminal-green); box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); }
-.status-dot.amber { background: var(--alert-amber); box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); animation: blink 1s step-end infinite; }
-.status-dot.red { background: var(--danger-red); box-shadow: 0 0 8px rgba(220, 38, 38, 0.5); animation: blink 0.5s step-end infinite; }
-@keyframes blink { 50% { opacity: 0.3; } }
-
-/* Checkpoint card */
+/* ── Checkpoint Card ── */
 .checkpoint-card {
-  background: var(--surface-raised); border: 1px solid var(--border);
-  border-radius: 6px; padding: 14px; transition: all 0.2s;
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s;
 }
-.checkpoint-card:hover { border-color: var(--border-active); }
+.checkpoint-card:hover {
+  background: var(--surface-raised);
+}
+
+/* ── Status indicator ── */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-share-tech), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--terminal-green);
+}
+
+/* ── Section titles ── */
+.section-title {
+  font-family: var(--font-rajdhani);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
